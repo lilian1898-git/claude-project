@@ -1,7 +1,11 @@
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 from openai import OpenAI
 
-client = OpenAI(api_key="YOUR_API_KEY_HERE")
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # Read input
 with open("inbox.txt", "r", encoding="utf-8") as f:
@@ -23,13 +27,13 @@ Topic: {task.get('topic','')}
 Style: {task.get('style','')}
 Length: {task.get('length','')}
 
-Follow the instructions exactly and respond clearly.
+Follow instructions exactly and respond clearly.
 """
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a precise, structured AI assistant."},
+            {"role": "system", "content": "You are a precise structured automation engine."},
             {"role": "user", "content": prompt}
         ]
     )
@@ -39,6 +43,8 @@ Follow the instructions exactly and respond clearly.
 outputs = []
 
 for line in raw:
+    if not line.strip():
+        continue
     task_data = parse_line(line)
     result = agent(task_data)
     outputs.append(result)
@@ -53,4 +59,4 @@ with open("outputs.txt", "a", encoding="utf-8") as f:
         f.write(o)
         f.write("\n--------------------\n")
 
-print("OpenAI agent run complete.")
+print("Automation run complete.")
