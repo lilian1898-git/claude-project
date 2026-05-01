@@ -1,0 +1,3 @@
+print task: explain | topic: AI | style: simple | length: short
+task: explain | topic: quantum computing | style: beginner | length: medium
+task: summarize | topic: machine learning | style: concise | length: short
